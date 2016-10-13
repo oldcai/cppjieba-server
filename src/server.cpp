@@ -34,16 +34,21 @@ class ReqHandler: public IRequestHandler {
 
   virtual bool DoPOST(const HttpReqInfo& httpReq, string& strSnd) {
     vector<string> words;
-    Run(httpReq.GetBody(), "MIX", "simple", strSnd);
+    Run(httpReq.GetBody(), "TAG", "simple", strSnd);
     return true;
   }
 
-  void Run(const string& sentence, 
-           const string& method, 
+  void Run(const string& sentence,
+           const string& method,
            const string& format,
            string& strSnd) const {
     vector<string> words;
-    if ("MP" == method) {
+    if ("TAG" == method) {
+      vector<pair<string, string> > tagres;
+      jieba_.Tag(sentence, tagres);
+      strSnd << tagres;
+      return;
+    } else if ("MP" == method) {
       jieba_.Cut(sentence, words, false);
     } else if ("HMM" == method) {
       jieba_.CutHMM(sentence, words);
@@ -81,11 +86,11 @@ bool Run(int argc, char** argv) {
   string userDictPath = conf.Get("user_dict_path", "");
 
   LOG(INFO) << "config info: " << conf.GetConfigInfo();
-  
-  cppjieba::Jieba jieba(dictPath, 
-        modelPath, 
+
+  cppjieba::Jieba jieba(dictPath,
+        modelPath,
         userDictPath);
-  
+
   ReqHandler reqHandler(jieba);
   ThreadPoolServer server(threadNumber, port, reqHandler);
   return server.Start();
