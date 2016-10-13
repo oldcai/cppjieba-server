@@ -1,0 +1,14 @@
+# /usr/lib/systemd/system/cjserver.service
+[Unit]
+Description=CppJieba Server
+Wants=network-online.target
+After=network-online.target
+
+[Service]
+Type=simple
+PIDFile=/run/cjserver.pid
+ExecStart=/usr/local/cppjieba-server/bin/cjserver /usr/local/cppjieba-server/conf/server.conf
+
+[Install]
+WantedBy=multi-user.target
+
