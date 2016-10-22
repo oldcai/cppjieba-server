@@ -66,9 +66,12 @@ ostream& operator << (ostream& os, const vector<T>& v) {
   if(v.empty()) {
     return os << "[]";
   }
-  os<<"[\""<<v[0];
   stringstream ss;
   string s;
+  ss << v[0];
+  s = ss.str();
+  escapeString(s);
+  os<<"[\""<<s;
   for(size_t i = 1; i < v.size(); i++) {
     ss.str(std::string());
     ss << v[i];
