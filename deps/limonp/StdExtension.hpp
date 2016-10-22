@@ -56,6 +56,9 @@ void replaceAll( string& source, const string& from, const string& to )
 void escapeString(string& source) {
       replaceAll(source, "\\", "\\\\");
       replaceAll(source, "\"", "\\\"");
+      replaceAll(source, "\t", "\\t");
+      replaceAll(source, "\n", "\\n");
+      replaceAll(source, "\r", "\\r");
 }
 
 template<typename T>
