@@ -32,6 +32,31 @@ using std::tr1::unordered_set;
 #define print(x) std::cout << x << std::endl
 
 namespace std {
+void replaceAll( string& source, const string& from, const string& to )
+{
+    string newString;
+    newString.reserve( source.length() );  // avoids a few memory allocations
+
+    string::size_type lastPos = 0;
+    string::size_type findPos;
+
+    while( string::npos != ( findPos = source.find( from, lastPos )))
+    {
+        newString.append( source, lastPos, findPos - lastPos );
+        newString += to;
+        lastPos = findPos + from.length();
+    }
+
+    // Care for the rest after last occurrence
+    newString += source.substr( lastPos );
+
+    source.swap( newString );
+}
+
+void escapeString(string& source) {
+      replaceAll(source, "\\", "\\\\");
+      replaceAll(source, "\"", "\\\"");
+}
 
 template<typename T>
 ostream& operator << (ostream& os, const vector<T>& v) {
@@ -39,8 +64,14 @@ ostream& operator << (ostream& os, const vector<T>& v) {
     return os << "[]";
   }
   os<<"[\""<<v[0];
+  stringstream ss;
+  string s;
   for(size_t i = 1; i < v.size(); i++) {
-    os<<"\", \""<<v[i];
+    ss.str(std::string());
+    ss << v[i];
+    s = ss.str();
+    escapeString(s);
+    os<<"\", \""<<s;
   }
   os<<"\"]";
   return os;
