@@ -32,33 +32,24 @@ using std::tr1::unordered_set;
 #define print(x) std::cout << x << std::endl
 
 namespace std {
-void replaceAll( string& source, const string& from, const string& to )
-{
-    string newString;
-    newString.reserve( source.length() );  // avoids a few memory allocations
-
-    string::size_type lastPos = 0;
-    string::size_type findPos;
-
-    while( string::npos != ( findPos = source.find( from, lastPos )))
-    {
-        newString.append( source, lastPos, findPos - lastPos );
-        newString += to;
-        lastPos = findPos + from.length();
+string escapeJsonString(const string& input) {
+    ostringstream ss;
+    for (auto iter = input.cbegin(); iter != input.cend(); iter++) {
+    //C++98/03:
+    //for (std::string::const_iterator iter = input.begin(); iter != input.end(); iter++) {
+        switch (*iter) {
+            case '\\': ss << "\\\\"; break;
+            case '"': ss << "\\\""; break;
+            case '/': ss << "\\/"; break;
+            case '\b': ss << "\\b"; break;
+            case '\f': ss << "\\f"; break;
+            case '\n': ss << "\\n"; break;
+            case '\r': ss << "\\r"; break;
+            case '\t': ss << "\\t"; break;
+            default: ss << *iter; break;
+        }
     }
-
-    // Care for the rest after last occurrence
-    newString += source.substr( lastPos );
-
-    source.swap( newString );
-}
-
-void escapeString(string& source) {
-      replaceAll(source, "\\", "\\\\");
-      replaceAll(source, "\"", "\\\"");
-      replaceAll(source, "\t", "\\t");
-      replaceAll(source, "\n", "\\n");
-      replaceAll(source, "\r", "\\r");
+    return ss.str();
 }
 
 template<typename T>
@@ -70,13 +61,13 @@ ostream& operator << (ostream& os, const vector<T>& v) {
   string s;
   ss << v[0];
   s = ss.str();
-  escapeString(s);
+  s = escapeJsonString(s);
   os<<"[\""<<s;
   for(size_t i = 1; i < v.size(); i++) {
     ss.str(std::string());
     ss << v[i];
     s = ss.str();
-    escapeString(s);
+    s = escapeJsonString(s);
     os<<"\", \""<<s;
   }
   os<<"\"]";
