@@ -62,7 +62,7 @@ ostream& operator << (ostream& os, const vector<T>& v) {
   ss << v[0];
   s = ss.str();
   s = escapeJsonString(s);
-  os<<"[\""<<s;
+  os << "[\"" << s;
   for(size_t i = 1; i < v.size(); i++) {
     ss.str(std::string());
     ss << v[i];
