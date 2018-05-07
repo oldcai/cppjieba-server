@@ -41,11 +41,40 @@ string escapeJsonString(const string& input) {
             case '\\': ss << "\\\\"; break;
             case '"': ss << "\\\""; break;
             case '/': ss << "\\/"; break;
-            case '\b': ss << "\\b"; break;
-            case '\f': ss << "\\f"; break;
             case '\n': ss << "\\n"; break;
             case '\r': ss << "\\r"; break;
             case '\t': ss << "\\t"; break;
+            // control character
+            case '\x0': break;
+            case '\x1': break;
+            case '\x2': break;
+            case '\x3': break;
+            case '\x4': break;
+            case '\x5': break;
+            case '\x6': break;
+            case '\x7': break;
+            case '\x8': break;
+            case '\xb': break;
+            case '\xc': break;
+            case '\xe': break;
+            case '\xf': break;
+            case '\x10': break;
+            case '\x11': break;
+            case '\x12': break;
+            case '\x13': break;
+            case '\x14': break;
+            case '\x15': break;
+            case '\x16': break;
+            case '\x17': break;
+            case '\x18': break;
+            case '\x19': break;
+            case '\x1a': break;
+            case '\x1b': break;
+            case '\x1c': break;
+            case '\x1d': break;
+            case '\x1e': break;
+            case '\x1f': break;
+            case '\x7f': break;
             default: ss << *iter; break;
         }
     }
